@@ -3,11 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PermissionSeeder extends Seeder
 {
@@ -17,10 +13,14 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            'home' => [
+                'home:view' => 'Home View',
+            ],
             'lead' => [
                 'lead:view' => 'Lead View',
-                'lead:create' => 'Lead Create',
-                'lead:assign' => 'Lead Assignments',
+                'lead:assign' => 'Lead Assign',
+                'lead-status:change' => 'Lead Status Change',
+                'lead-application:move' => 'Lead move to application',
             ],
         ];
 

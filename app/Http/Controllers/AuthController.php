@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AuthResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class AuthController extends Controller
                     'message' => 'Invalid Credentials'
                 ],401);
             }
-            return UserResource::make($user);
+            return AuthResource::make($user);
 
         }catch (\Exception $e){
             return response()->json([

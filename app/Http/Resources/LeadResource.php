@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class LeadResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +18,12 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => $this->created_at
+            'phone' => $this->phone,
+            'notes' => $this->note,
+            'status' => (string)$this->status,
+            'status_name' => config('dropdown.lead_status')[$this->status],
+            'counselor' => $this->counselor_id ? $this->counselor->name : null,
+            'counselor_id' => $this->counselor_id,
         ];
     }
 }
