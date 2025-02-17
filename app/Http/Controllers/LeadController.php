@@ -9,6 +9,8 @@ use App\Http\Resources\LeadResource;
 use App\Models\Application;
 use App\Models\Lead;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class LeadController extends Controller
 {
@@ -17,11 +19,17 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+        abort_unless(Gate::allows('lead:view'), 401);
 
+        $use = Auth::user();
         $filters = $request->only(['q', 'itemsPerPage', 'sortBy']);
 
         $itemPerPage = $filters['itemsPerPage']??10;
         $query = Lead::where('status','>',0);
+
+        if($use->role == 'counselor'){
+            $query = $query->where('counselor_id',$use->id);
+        }
 
         if(!empty($filters['q'])){
             $key = $filters['q'];
@@ -45,43 +53,13 @@ class LeadController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreLeadRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Lead $lead)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Lead $lead)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
         try {
+            abort_unless(Gate::allows('lead:assign'), 401);
+
             $request->validated();
             $lead->update([
                 'counselor_id'=> $request->counselor_id,
@@ -93,17 +71,11 @@ class LeadController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Lead $lead)
-    {
-        //
-    }
-
     public function status(UpdateLeadStatusRequest $request,Lead $lead)
     {
         try {
+            abort_unless(Gate::allows('lead-status:change'), 401);
+
             $request->validated();
             $lead->update(['status' => $request->status]);
             return  response()->json(['status'=>true,'message' => 'Update lead status successfully']);
@@ -115,6 +87,8 @@ class LeadController extends Controller
     {
         try {
 
+            abort_unless(Gate::allows('lead-application:move'), 401);
+
             $isExist = Application::where('lead_id',$lead->id)->count();
             if(!$isExist){
                 Application::create([
@@ -122,7 +96,8 @@ class LeadController extends Controller
                     'email'=> $lead->email,
                     'phone'=> $lead->phone,
                     'lead_id'=> $lead->id,
-                    'user_id'=> $lead->counselor_id,
+                    'user_id'=> $lead->counselor_id??Auth::user()->id,
+                    'status'=> 2,
                 ]);
 
                 $lead->update(['status'=>0]);

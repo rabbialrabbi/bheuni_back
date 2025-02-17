@@ -56,7 +56,12 @@ class RolePermissionSeeder extends Seeder
     private function giveAllPermissionToCounselor()
     {
         $counselorPermission = [
+            'home:view',
             'lead:view',
+            'lead-status:change',
+            'lead-application:move',
+            'application:view',
+            'application-status:change',
         ];
 
         /* Assign role permissions to Super Admin for admin panel*/

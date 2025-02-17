@@ -22,6 +22,10 @@ class PermissionSeeder extends Seeder
                 'lead-status:change' => 'Lead Status Change',
                 'lead-application:move' => 'Lead move to application',
             ],
+            'application' => [
+                'application:view' => 'application View',
+                'application-status:change' => 'application Status Change',
+            ],
         ];
 
         foreach ($permissions as $title=>$value){

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->foreignId('lead_id')->nullable()->constrained('leads')->onDelete('set null');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }

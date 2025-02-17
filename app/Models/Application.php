@@ -18,4 +18,8 @@ class Application extends Model
         'user_id',
         'status', // 0 - Rejected, 1-approved, 2- in progress
     ];
+
+    public function counselor(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

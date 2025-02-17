@@ -7,6 +7,10 @@ return [
         2 => 'Bad Timing',
         3 => 'Not Interested',
         4 => 'Not Qualified'
+    ],
+    'application_status' => [
+        2 => 'In progress',
+        1 => 'Approved',
+        0 => 'Rejected'
     ]
-
 ];

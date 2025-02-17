@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Lead;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
                 return $user->hasRole($permission->roles);
             });
         }
+
+        Gate::define('update-lead-status', function ($user,Lead $lead) {
+            return $user->id == $lead->counselor_id;
+        });
     }
 
     /**
